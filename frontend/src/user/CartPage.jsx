@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import displayRazorpay from "./RazorPay.js"; // Import the Razorpay function
-[[[[[[[[]]]]]]]]
+
 const CartPage = () => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
