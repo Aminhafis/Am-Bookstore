@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules"; 
 import "swiper/css"; 
@@ -80,12 +80,12 @@ const products = [
 
   
 
-  useEffect(() => {
-    let id = localStorage.getItem("Id");
-    if (!id) {
-      navigate("/login");
-    }
-  });
+  // useEffect(() => {
+  //   let id = localStorage.getItem("Id");
+  //   if (!id) {
+  //     navigate("/login");
+  //   }
+  // });
   return (
     <div>
       <Swiper
