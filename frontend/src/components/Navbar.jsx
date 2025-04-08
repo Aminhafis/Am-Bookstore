@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IoSearch } from "react-icons/io5";
 import { VscAccount , VscThreeBars} from "react-icons/vsc";
 import { RiShoppingBagLine } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const listItems = [
   { name: 'Home', path: '/home' },
@@ -15,7 +15,20 @@ const listItems = [
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+
+   // Background color map for each route
+   const bgColorMap = {
+    "/home": "bg-stone-200",
+    "/about": "bg-white",
+    "/viewProduct": "bg-zinc-100",
+    "/category": "bg-zinc-200",
+    "/blog": "bg-white",
+    "/contact": "bg-white",
+  };
+
+  const currentBg = bgColorMap[location.pathname] || "bg-white";
 
   const handleLogout = () => {
     localStorage.removeItem("Id");
@@ -24,7 +37,7 @@ function Navbar() {
   };
 
   return (
-    <div className='bg-inherit'>
+    <div className={`${currentBg} transition-colors duration-500`}>
       <div className='hidden md:flex font-BebasNeue flex-row py-2 text-gray-500 items-center justify-between px-4'>
         <div className='flex justify-start gap-6'>
           <span>Our Social:</span>

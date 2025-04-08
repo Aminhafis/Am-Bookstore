@@ -80,12 +80,7 @@ const products = [
 
   
 
-  // useEffect(() => {
-  //   let id = localStorage.getItem("Id");
-  //   if (!id) {
-  //     navigate("/login");
-  //   }
-  // });
+  
   return (
     <div>
       <Swiper
