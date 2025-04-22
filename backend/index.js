@@ -26,7 +26,8 @@ const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname,'public')))
 
 
-mongoose.connect("mongodb://localhost:27017/Bookstore",{
+mongoose.connect(process.env.MONGO_URI,
+{
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
