@@ -2,11 +2,36 @@ import booksModel from "../model/booksModel.js";
 import userModel from "../model/userModel.js";
 import bcrypt from 'bcrypt'
 import  jwt from "jsonwebtoken"
+import validator from 'validator';
 
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role = 'user' } = req.body;
+
+    // Validate input fields
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Validate email format
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    // Validate password length (minimum 8 characters)
+    if (!validator.isLength(password, { min: 8 })) {
+      return res.status(400).json({ message: "Password must be at least 8 characters long" });
+    }
+
+    // Validate password strength (must contain at least one uppercase letter and one number)
+    if (!validator.matches(password, /[A-Z]/)) {
+      return res.status(400).json({ message: "Password must contain at least one uppercase letter" });
+    }
+
+    if (!validator.matches(password, /[0-9]/)) {
+      return res.status(400).json({ message: "Password must contain at least one number" });
+    }
 
     // Check if the user already exists
     const existingUser = await userModel.findOne({ email });
@@ -22,7 +47,7 @@ export const registerUser = async (req, res) => {
     const newUser = new userModel({
       name,
       email,
-      password:hashedPassword,
+      password: hashedPassword,
       role,
     });
 
@@ -32,8 +57,8 @@ export const registerUser = async (req, res) => {
     // Send response
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Register error:", error.message);
+    res.status(500).json({ message: error.message || "Server error" });
   }
 };
 
@@ -66,17 +91,21 @@ export const loginUser = async (req, res) => {
 
         jwt.sign(
             payload,
-            "ABCDE",
+            process.env.JWT_SECRET, // ✅ secure secret from .env
             { expiresIn: 360000 },
             (err, token) => {
-                if (err) throw err;
-                res.json({ token, user });
-            }
-        );
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
-    }
+              if (err) throw err;
+              const { password, ...userWithoutPassword } = user._doc;
+              res.json({ token, user: userWithoutPassword });
+                          }
+          );
+          
+        } catch (error) {
+          console.error("❌ Error in registerUser:", error.message);
+          console.error(error.stack);
+          res.status(500).json({ message: "Server error" });
+        }
+        
 };
 
 //view products controller

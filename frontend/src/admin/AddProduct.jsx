@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {  toast } from "react-toastify";
 
 function AddProduct() {
   const [title, setTitle] = useState('');
@@ -9,10 +10,8 @@ function AddProduct() {
   const [genre, setGenre] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
-  const navigate = useNavigate();
-
-  
-    
+  const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();  
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);  
@@ -21,6 +20,17 @@ function AddProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!title || !author || !price || !genre || !description || !image) {
+      toast.error("All fields are required!");
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error("You must be logged in to add a product.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append('title', title);
     formData.append('author', author);
@@ -28,10 +38,12 @@ function AddProduct() {
     formData.append('genre', genre);
     formData.append('description', description);
     formData.append('image', image); 
+    formData.append('quantity', quantity);
+
 
     try {
 
-      const response = await axios.post('http://localhost:12000/api/book/postData', formData, {
+      const response = await axios.post('https://am-bookstore-mw9b.onrender.com/api/book/postData', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${localStorage.getItem('token')}` 
@@ -39,10 +51,11 @@ function AddProduct() {
       });
 
       console.log(response.data);
-      alert('Uploaded successfully!');
-      // navigate('/viewProduct'); 
+      toast.success('Product Uploaded successfully!');
+      navigate('/viewProduct');  
     } catch (error) {
-      console.error(error);
+      toast.error("Failed to add product. Please try again.")
+      console.error("Error adding product",error);
     }
   };
 
@@ -111,6 +124,16 @@ function AddProduct() {
             onChange={handleImageChange}
             className="block w-full border p-2"
           />
+        </div>
+
+        <div>
+          <label className='block'>Quantity:</label>
+          <input 
+          type="number"
+           value={quantity} 
+           onChange={(e)=> setQuantity(e.target.value)}
+           min={1}
+           className='block w-full border p-2'/>
         </div>
 
         <button type="submit" className="bg-blue-500 text-white px-4 py-2">

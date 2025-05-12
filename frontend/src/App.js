@@ -1,4 +1,3 @@
-// import RegisterUser from "./components/RegisterUser";
 import app from '../src/app.css'
 import Home from "./components/Home";
 import RegisterUser from './components/RegisterUser'
@@ -14,6 +13,9 @@ import CartPage from './user/CartPage';
 import BookByCategory from './components/BookByCategory';
 import BookById from './components/BookById';
 import Contact from './components/Contact';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
         <Route path='/book/:id' element={<BookById/>}></Route>
         </Route>
       </Routes> 
+
+      <ToastContainer position="top-center" autoClose={2000} />
 
       </BrowserRouter>
     </>

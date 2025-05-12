@@ -3,36 +3,32 @@ import mongoose from "mongoose";
 const bookSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true,
+        required: true
     },
     author: {
         type: String,
-        required: true,
+        required: true
     },
     price: {
         type: Number,
-        required: true,
+        required: true
     },
     genre: {
         type: String,
-        required: true,
+        required: true
     },
     description: {
         type: String,
-        required: true,
+        required: true
     },
     image: {
         type: String,
-        required: true,
-    },quantity: {
-        type: Number,
         required: true
-    }
-    // category: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'categories', // Ensure this matches your category model name
-    //     required: true
-    // }
+    },
+    quantity: {
+        type: Number,
+        default: 1 // ❌ This is what caused the error
+      }
 });
 
 const booksModel = mongoose.model('Books', bookSchema);

@@ -11,7 +11,7 @@ const CartPage = () => {
   const fetchCart = async () => {
     const userId = localStorage.getItem("Id");
     try {
-      const response = await axios.get(`http://localhost:12000/api/cart/${userId}`);
+      const response = await axios.get(`https://am-bookstore-mw9b.onrender.com/api/cart/${userId}`);
       setCart(response.data.items);
       setLoading(false);
     } catch (error) {
@@ -40,7 +40,7 @@ const CartPage = () => {
       <div className="grid gap-6">
         {cart.map((item) => (
           <div key={item.bookId._id} className="flex justify-between items-center p-4 shadow rounded bg-zinc-200">
-            <img src={`http://localhost:12000/images/${item.bookId.image}`} className="w-24 h-36" alt={item.title} />
+            <img src={`https://am-bookstore-mw9b.onrender.com/images/${item.bookId.image}`} className="w-24 h-36" alt={item.title} />
             <span>{item.title}</span>
             <span>Quantity: {item.quantity}</span>
             <span>Total: ${item.totalPrice}</span>

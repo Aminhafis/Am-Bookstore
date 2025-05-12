@@ -1,8 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import {  toast } from "react-toastify";
 
 function Loginpage() {
   const [email, setEmail] = useState("");
@@ -13,17 +12,19 @@ function Loginpage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:12000/api/user/login", {
+      const response = await axios.post("https://am-bookstore-mw9b.onrender.com/api/user/login", {
         email,
         password,
       });
       console.log(response);
 
+      localStorage.setItem("token", response.data.token); // save for both roles
+      console.log("Saved token:", localStorage.getItem("token"));
+
       if (response.data.user.role === "admin") {
-        toast.success("Welcome Admin!", { autoClose: 1000 });
+        toast.success("Welcome Admin ✌️", { autoClose: 1000 });
         setTimeout(() => navigate("/dashboard"), 1000); // Navigate after toast
       } else {
-        localStorage.setItem("Id", response.data.user._id);
         toast.success("Login successfully!", { autoClose: 1000 });
         setTimeout(() => navigate("/home"), 1000); // Navigate after toast
       }
@@ -35,7 +36,7 @@ function Loginpage() {
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit} 
       className="w-full h-screen bg-white text-center pt-24 flex-row justify-center items-center" 
     >
       <h1 className="text-5xl font-serif py-4">Hello</h1>
@@ -66,8 +67,8 @@ function Loginpage() {
       </button>
       <p className="text-xs text-indigo-900 mt-4">FORGOT PASSWORD?</p>
 
-      <ToastContainer position="top-center" />
-    </form>
+
+</form>
   );
 }
 

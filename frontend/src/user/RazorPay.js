@@ -19,7 +19,7 @@ const displayRazorpay = async (totalAmount, userId) => {
   }
 
   // Create an order in the backend
-  const result = await axios.post("http://localhost:12000/api/create-order", {
+  const result = await axios.post("https://am-bookstore-mw9b.onrender.com/api/create-order", {
     amount: totalAmount,
     currency: "INR", // Example: Hardcoding INR. Replace if needed
     userId: localStorage.getItem("Id"),
@@ -43,7 +43,7 @@ const displayRazorpay = async (totalAmount, userId) => {
     handler: async function (response) {
       // After payment is successful, verify the payment on the backend
       const verificationResult = await axios.post(
-        "http://localhost:12000/api/verify-payment",
+        "https://am-bookstore-mw9b.onrender.com/api/verify-payment",
         {
           order_id: order_id, 
           payment_id: response.razorpay_payment_id,

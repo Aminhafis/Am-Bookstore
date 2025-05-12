@@ -11,7 +11,7 @@ const BookById = () => {
   const addToCart = async (book)=>{
     let userId = localStorage.getItem('Id')
     try {
-      await axios.post('http://localhost:12000/api/cart', {
+      await axios.post('https://am-bookstore-mw9b.onrender.com/api/cart', {
         userId,
         bookId: book._id,
         title: book.title,
@@ -27,7 +27,7 @@ const BookById = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        let response = await axios.get(`http://localhost:12000/api/book/getDataById/${id}`);
+        let response = await axios.get(`https://am-bookstore-mw9b.onrender.com/api/book/getDataById/${id}`);
         console.log(response.data);
         setBook(response.data);
       } catch (error) {
@@ -46,7 +46,7 @@ const BookById = () => {
       <div className='flex flex-col items-center'>
         <img
           className="w-48 h-56 object-cover rounded-lg shadow-lg mb-4"
-          src={`http://localhost:12000/images/${book.image}`}
+          src={`https://am-bookstore-mw9b.onrender.com/images/${book.image}`}
           alt={book.title}
         />
         <h2 className="text-5xl text-center font-semibold">{book.title}</h2>

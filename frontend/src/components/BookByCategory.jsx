@@ -13,7 +13,7 @@ const BookByCategory = () => {
   // Fetch all books from the server  
   const fetchBooks = async () => {
     try {
-      const response = await axios.get("http://localhost:12000/api/book/getData");
+      const response = await axios.get("https://am-bookstore-mw9b.onrender.com/api/book/getData");
       const bookData = response.data;
       setBooks(bookData);
       setFilteredBooks(bookData);
@@ -69,7 +69,7 @@ const BookByCategory = () => {
             >
               <img
                 className="w-48 h-56 object-cover rounded-lg shadow-md mb-4"
-                src={`http://localhost:12000/images/${book.image}`}
+                src={`https://am-bookstore-mw9b.onrender.com/images/${book.image}`}
                 alt={book.title}
                 onClick={()=> navigate(`/book/${book._id}`)}
               />

@@ -1,33 +1,46 @@
 import booksModel from '../model/booksModel.js'
+import cloudinary from '../config/cloudinary.js';
+import streamifier from 'streamifier'
 
-// POST - Add Book
-export const postBooks = async (req, res) => {
+export  const postBooks = async (req, res) => {
     try {
-        const { title, author, price, genre, description, quantity } = req.body;
-        
-        if (!req.file) {
-            return res.status(400).json({ error: "No file uploaded" });
-        }
-        
-        const image = req.file.filename;
-        let books = await booksModel.create({
-            title,
-            author,
-            price,
-            genre,
-            description,
-            image,
-            quantity
-            
-        });
-        
-        res.status(201).json(books);
-        console.log(books);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error!' });
+      const { title, author, price, genre, description , quantity } = req.body;
+  
+      console.log('Received book data:', req.body);
+      console.log('Received file:', req.file);
+  
+      if (!req.file) {
+        return res.status(400).json({ error : "No image uploaded"})
     }
+  
+    const result = await new Promise((resolve, reject)=> {
+        const stream = cloudinary.uploader.upload_stream(
+            {resource_type: "image" },
+            (error , result)=> {
+                if (error) return reject(error)
+                resolve(result)
+            }
+        )
+        streamifier.createReadStream(req.file.buffer).pipe(stream)
+    })
+
+    const book = await booksModel.create({
+        title,
+        author,
+        price,
+        genre,
+        description,
+        image: result.secure_url,
+        quantity: quantity || 1
+    })
+
+    res.status(201).json(book);
+  } catch (err) {
+    console.error("🔥 Error posting book:", err);
+    res.status(500).json({ error: "Server error", detail: err.message });
+  }
 };
+  
 
 // GET - Get all Books
 export const getBooks = async (req, res) => {

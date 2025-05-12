@@ -10,7 +10,7 @@ const ViewProduct = ({ userId }) => {
 
   const fetchBooks = async () => {
     try {
-      const response = await axios.get(`http://localhost:12000/api/book/getData`);
+      const response = await axios.get(`https://am-bookstore-mw9b.onrender.com/api/book/getData`);
       setBooks(response.data);
       console.log(response.data);
     } catch (error) {
@@ -37,7 +37,7 @@ const ViewProduct = ({ userId }) => {
             <div key={book._id} className="flex flex-col items-center transform transition duration-300 hover:scale-105  hover: pt-10">
               <img
                 className="w-48 h-56 object-cover rounded-lg shadow-lg  mb-4"
-                src={`http://localhost:12000/images/${book.image}`}
+                src={`https://am-bookstore-mw9b.onrender.com/images/${book.image}`}
                 alt={book.title}
                 onClick={()=> navigate(`/book/${book._id}`)}
               />
