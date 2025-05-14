@@ -40,10 +40,10 @@ const CartPage = () => {
       <div className="grid gap-6">
         {cart.map((item) => (
           <div key={item.bookId._id} className="flex justify-between items-center p-4 shadow rounded bg-zinc-200">
-            <img src={`https://am-bookstore-mw9b.onrender.com/images/${item.bookId.image}`} className="w-24 h-36" alt={item.title} />
+            <img src={item.bookId.image} className="w-24 h-36" alt={item.title} />
             <span>{item.title}</span>
             <span>Quantity: {item.quantity}</span>
-            <span>Total: ${item.totalPrice}</span>
+            <span>Total: Rs{item.totalPrice}</span>
           </div>
         ))}
       </div>

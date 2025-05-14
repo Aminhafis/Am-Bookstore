@@ -1,4 +1,4 @@
-import app from '../src/app.css'
+import app from './app.css'
 import Home from "./components/Home";
 import RegisterUser from './components/RegisterUser'
 import Login from './components/Login'
@@ -13,6 +13,7 @@ import CartPage from './user/CartPage';
 import BookByCategory from './components/BookByCategory';
 import BookById from './components/BookById';
 import Contact from './components/Contact';
+import EditProduct from './admin/EditProduct';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -36,6 +37,8 @@ function App() {
         <Route path='/cart' element={<CartPage/>}></Route>
         <Route path='/category' element={<BookByCategory/>}></Route>
         <Route path='/book/:id' element={<BookById/>}></Route>
+        <Route path="/admin/edit-product/:id" element={<EditProduct />} />
+
         </Route>
       </Routes> 
 

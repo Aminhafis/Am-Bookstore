@@ -1,6 +1,7 @@
 import express from 'express';
 import { upload } from '../middlewares/multerMemory.js'; // ✅ use only this
 import { postBooks,getBooks,updateBooks,getBooksById,deleteBooksById } from '../controllers/booksController.js';
+import { verifyToken, isAdmin } from '../middlewares/authMiddleware.js'
 
 const router = express.Router();
 
@@ -12,12 +13,14 @@ console.log('💾 Multer Middleware Applied');
 router.get('/getData', getBooks);
 
 // ✅ PUT route to update a book
-router.put('/updateBooks', upload.single('image'), updateBooks);
+router.put('/updateBooks/:id', upload.single('image'), updateBooks);
+console.log("Books routes loaded"); // in booksRoutes.js
+
 
 // ✅ GET route to retrieve a book by ID
 router.get('/getDataById/:id', getBooksById);
 
 // ✅ DELETE route to remove a book by ID
-router.delete('/deleteDataById/:id', deleteBooksById);
+router.delete('/deleteDataById/:id', verifyToken, isAdmin, deleteBooksById);
 
 export default router;

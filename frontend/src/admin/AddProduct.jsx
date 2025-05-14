@@ -52,7 +52,7 @@ function AddProduct() {
 
       console.log(response.data);
       toast.success('Product Uploaded successfully!');
-      navigate('/viewProduct');  
+      // navigate('/viewProduct');  
     } catch (error) {
       toast.error("Failed to add product. Please try again.")
       console.error("Error adding product",error);

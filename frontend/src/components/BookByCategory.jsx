@@ -69,7 +69,7 @@ const BookByCategory = () => {
             >
               <img
                 className="w-48 h-56 object-cover rounded-lg shadow-md mb-4"
-                src={`https://am-bookstore-mw9b.onrender.com/images/${book.image}`}
+                src={book.image}
                 alt={book.title}
                 onClick={()=> navigate(`/book/${book._id}`)}
               />

@@ -46,7 +46,7 @@ const BookById = () => {
       <div className='flex flex-col items-center'>
         <img
           className="w-48 h-56 object-cover rounded-lg shadow-lg mb-4"
-          src={`https://am-bookstore-mw9b.onrender.com/images/${book.image}`}
+          src={book.image}
           alt={book.title}
         />
         <h2 className="text-5xl text-center font-semibold">{book.title}</h2>

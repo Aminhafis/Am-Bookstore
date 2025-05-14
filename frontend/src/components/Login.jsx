@@ -19,6 +19,7 @@ function Loginpage() {
       console.log(response);
 
       localStorage.setItem("token", response.data.token); // save for both roles
+      localStorage.setItem("role", response.data.user.role); // ✅ Add this line
       console.log("Saved token:", localStorage.getItem("token"));
 
       if (response.data.user.role === "admin") {

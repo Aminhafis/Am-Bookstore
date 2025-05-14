@@ -57,22 +57,40 @@ export const getBooks = async (req, res) => {
 // UPDATE - Update a Book
 export const updateBooks = async (req, res) => {
     try {
-        const id = req.params.id;
-        const { title, author, price, genre, description, image} = req.body;
-        
+        console.log("Received PUT request on /updateBooks/:id"); // inside controller
+
+        const id = req.params.id;  // Get the ID from the route parameter
+        const { title, author, price, genre, description } = req.body;
+        let image;
+
+        if (req.file) {
+            // If the file is provided, we should update the image as well.
+            image = req.file.path || req.file.url || req.file.location;
+
+        } else {
+            // If no new image is provided, we don't update the image field
+            image = req.body.image; // You should pass the image URL from the client-side if not updating it
+        }
+
+        // Find the book by ID and update its details
         let updatedBook = await booksModel.findByIdAndUpdate(
             id,
-            { title, author, price, genre, description, image},
-            { new: true }
+            { title, author, price, genre, description, image },
+            { new: true } // Ensure that the updated document is returned
         );
-        
+
+        if (!updatedBook) {
+            return res.status(404).json({ error: "Book not found" });
+        }
+
         res.status(200).json(updatedBook);
         console.log(updatedBook);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: 'Server error', detail: error.message });
     }
 };
+
 
 // GET - Get Book by ID
 export const getBooksById = async (req, res) => {
@@ -91,13 +109,19 @@ export const getBooksById = async (req, res) => {
 // DELETE - Delete Book by ID
 export const deleteBooksById = async (req, res) => {
     try {
-        const id = req.params.id;
-        let deletedBook = await booksModel.findByIdAndDelete(id);
-        res.status(200).json(deletedBook);
-        console.log(deletedBook);
+      const id = req.params.id;
+      const deletedBook = await booksModel.findByIdAndDelete(id);
+  
+      if (!deletedBook) {
+        return res.status(404).json({ error: 'Book not found' });
+      }
+  
+      console.log('Deleted book:', deletedBook);
+      res.status(200).json({ message: 'Book deleted successfully', deletedBook });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error' });
+      console.error('❌ Error deleting book:', error);
+      res.status(500).json({ error: 'Server error' });
     }
-};
+  };
+  
 
