@@ -1,6 +1,6 @@
 import express from 'express';
 import { upload } from '../middlewares/multerMemory.js'; // ✅ use only this
-import { postBooks,getBooks,updateBooks,getBooksById,deleteBooksById } from '../controllers/booksController.js';
+import { postBooks, getBooks, updateBooks, getBooksById, deleteBooksById, searchBooks } from '../controllers/booksController.js';
 import { verifyToken, isAdmin } from '../middlewares/authMiddleware.js'
 
 const router = express.Router();
@@ -22,5 +22,9 @@ router.get('/getDataById/:id', getBooksById);
 
 // ✅ DELETE route to remove a book by ID
 router.delete('/deleteDataById/:id', verifyToken, isAdmin, deleteBooksById);
+
+// search a book route
+router.get('/search', searchBooks); // <-- Your search route
+
 
 export default router;

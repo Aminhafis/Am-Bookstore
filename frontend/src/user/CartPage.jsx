@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import displayRazorpay from "./RazorPay.js"; // Import the Razorpay function
+import { toast } from "react-toastify";
+
 
 const CartPage = () => {
   const [cart, setCart] = useState([]);
@@ -15,7 +17,7 @@ const CartPage = () => {
       setCart(response.data.items);
       setLoading(false);
     } catch (error) {
-      setError("Failed to load cart");
+      toast.error("Sign-up to add book to the cart");
       setLoading(false);
     }
   };

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { IoSearch } from "react-icons/io5";
-import { VscAccount , VscThreeBars} from "react-icons/vsc";
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { FaXTwitter, FaFacebookF, FaInstagram } from "react-icons/fa6";
+import { VscAccount, VscThreeBars } from "react-icons/vsc";
 import { RiShoppingBagLine } from "react-icons/ri";
-import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from 'react-toastify';
+import SearchBox from './SearchBox';
 
 const listItems = [
   { name: 'Home', path: '/home' },
@@ -10,16 +12,38 @@ const listItems = [
   { name: 'Shop', path: '/viewProduct' },
   { name: 'Category', path: '/category' },
   { name: 'Blog', path: '/blog' },
-  { name: 'Contact', path: '/contact' }
+  { name: 'Contact', path: '/contact' },
 ];
 
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef();
 
-   // Background color map for each route
-   const bgColorMap = {
+  const isLoggedIn = localStorage.getItem("token");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("Id");
+    toast.success("User has been logged out");
+    setDropdownOpen(false);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const bgColorMap = {
     "/home": "bg-stone-200",
     "/about": "bg-white",
     "/viewProduct": "bg-zinc-100",
@@ -28,102 +52,130 @@ function Navbar() {
     "/contact": "bg-white",
   };
 
-  const currentBg = bgColorMap[location.pathname] || "bg-white";
-
-  const handleLogout = () => {
-    localStorage.removeItem("Id");
-    localStorage.removeItem("token");
-    navigate('/login');
-  };
+  const currentBg = location.pathname.startsWith('/book/')
+    ? "bg-zinc-300"
+    : bgColorMap[location.pathname] || "bg-white";
 
   return (
-    <div className={`${currentBg} transition-colors duration-500`}>
-      <div className='hidden md:flex font-BebasNeue flex-row py-2 text-gray-500 items-center justify-between px-4'>
-        <div className='flex justify-start gap-6'>
-          <span>Our Social:</span>
-          <span>In.</span>
-          <span>Fb.</span>
-          <span>X.</span>
+    <div className={`${currentBg} transition-colors duration-500 shadow-sm`}>
+      {/* Top strip */}
+      <div className='hidden md:flex justify-between items-center px-6 py-2 text-sm text-gray-500'>
+        <div className='flex gap-4'>
+          <span>Follow us:</span>
+          <FaInstagram className="hover:text-black cursor-pointer" />
+          <FaFacebookF className="hover:text-black cursor-pointer" />
+          <FaXTwitter className="hover:text-black cursor-pointer" />
         </div>
-        <div className='flex items-center gap-4'>
-          <div className='flex gap-1'>
-            <IoSearch aria-label="Search" className='h-6 w-6' />
-            <span className='inline'>Search</span>
-          </div>
-          <div className='flex gap-1'>
-            <RiShoppingBagLine
-              aria-label="Cart"
-              className='h-6 w-6'
-              onClick={() => navigate('/cart')}
-            />
-            <span className='inline'>Cart</span>
+        <div className='flex gap-6 items-center'>
+          <SearchBox />
+          <div
+            onClick={() => navigate('/cart')}
+            className='flex items-center gap-2 cursor-pointer'
+          >
+            <RiShoppingBagLine className="h-5 w-5" />
+            <span>Cart</span>
           </div>
         </div>
       </div>
-      <hr className='hidden md:block border-0 h-[1px] bg-black mx-4 md:mx-8' />
 
-      <div className='relative w-full flex items-center justify-between py-3 px-4 md:px-10 text-gray-800 font-bold'>
-        <h1 className='text-lg md:text-xl'>AM Bookstore</h1>
+      <hr className="border-t border-gray-300 mx-6" />
 
-        <div className='hidden md:flex items-center gap-8'>
-          <ul className='flex flex-row gap-8 text-lg'>
-            {listItems.map(({ name, path }, index) => (
-              <li 
-                className='cursor-pointer' 
-                onClick={() => navigate(path)}
-                key={index}
-              >
+      {/* Main Navbar */}
+      <div className='flex items-center justify-between px-6 py-4'>
+        <h1 className='text-xl font-bold'>AM Bookstore</h1>
+
+        {/* Desktop Menu */}
+        <div className='hidden md:flex gap-10 items-center'>
+          <ul className='flex gap-8 text-gray-800 font-medium'>
+            {listItems.map(({ name, path }) => (
+              <li key={path} className='cursor-pointer hover:text-gray-600' onClick={() => navigate(path)}>
                 {name}
               </li>
             ))}
           </ul>
 
-          <div className='flex items-center gap-4'>
-            <VscAccount
-              aria-label="Account"
-              className='h-6 w-6 cursor-pointer'
-              onClick={() => navigate("/login")}
-            />
-            <button className='text-sm' onClick={handleLogout}>Logout</button>
+          {/* Account Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setDropdownOpen(prev => !prev)}
+              className="flex items-center cursor-pointer"
+            >
+              <VscAccount className="h-6 w-6" />
+            </button>
+
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-32 bg-white border shadow-md rounded-md text-sm py-1 z-50">
+                {isLoggedIn ? (
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        navigate('/login');
+                        setDropdownOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate('/register');
+                        setDropdownOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
+                      Signup
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
-        <button
-          className='md:hidden text-2xl absolute right-4 top-3'
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
+        {/* Mobile Menu Icon */}
+        <button className='md:hidden text-2xl' onClick={() => setMenuOpen(!menuOpen)}>
           <VscThreeBars />
         </button>
       </div>
 
+      {/* Mobile Menu */}
       {menuOpen && (
-        <ul className='md:hidden flex flex-col gap-4 px-4 py-2 bg-stone-200 text-lg'>
-          {listItems.map(({ name, path }, index) => (
-            <li 
-              className='cursor-pointer border-b border-gray-300 py-2' 
+        <div className='md:hidden px-4 py-2 bg-stone-100 flex flex-col gap-4'>
+          {listItems.map(({ name, path }) => (
+            <span
+              key={path}
               onClick={() => {
                 navigate(path);
                 setMenuOpen(false);
               }}
-              key={index}
+              className='border-b pb-2 cursor-pointer text-lg'
             >
               {name}
-            </li>
+            </span>
           ))}
-        </ul>
-      )}
-
-      {menuOpen && (
-        <div className='md:hidden flex flex-col items-center gap-4 mt-2'>
-          <VscAccount
-            aria-label="Account"
-            className='h-6 w-6 cursor-pointer'
-            onClick={() => {
-              navigate("/login");
-              setMenuOpen(false); 
-            }}
-          />
-          <button className='text-sm' onClick={handleLogout}>Logout</button>
+          <div className='mt-2'>
+            {isLoggedIn ? (
+              <button onClick={handleLogout} className='w-full text-left py-2'>
+                Logout
+              </button>
+            ) : (
+              <>
+                <button onClick={() => { navigate("/login"); setMenuOpen(false); }} className='w-full text-left py-2'>
+                  Login
+                </button>
+                <button onClick={() => { navigate("/register"); setMenuOpen(false); }} className='w-full text-left py-2'>
+                  Signup
+                </button>
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -54,9 +54,9 @@ const ViewProduct = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 flex-grow">
           {currentBooks.map((book) => (
-            <div key={book._id} className="flex flex-col items-center transform transition duration-300 hover:scale-105 pt-10 bg-white p-4 rounded-lg shadow-lg">
+            <div key={book._id} className="flex flex-col items-center transform transition duration-300 hover:scale-105 pt-10 bg-zinc-100 p-4 rounded-lg">
               <img
-                className="w-48 h-56 object-cover rounded-lg mb-4 cursor-pointer"
+                className="w-48 h-56 mb-4 cursor-pointer"
                 src={book.image}
                 alt={book.title}
                 onClick={() => navigate(`/book/${book._id}`)}

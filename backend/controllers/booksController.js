@@ -124,4 +124,35 @@ export const deleteBooksById = async (req, res) => {
     }
   };
   
+  // to search a book by title,author
+  export const searchBooks = async (req, res) => {
+  try {
+    const query = req.query.q;
+    const regex = new RegExp(query, 'i'); // case-insensitive search
+
+    // Primary: match title or author
+    const books = await booksModel.find({
+      $or: [{ title: regex }, { author: regex }]
+    });
+
+    if (books.length > 0) {
+      return res.json({ found: true, books });
+    }
+
+    // Fallback: return related books sorted alphabetically
+    const relatedBooks = await booksModel.find({
+      $or: [
+        { title: { $regex: /^[a-zA-Z]/ } },
+        { author: { $regex: /^[a-zA-Z]/ } }
+      ]
+    }).sort({ title: 1 }); // alphabetical
+
+    return res.json({ found: false, books: relatedBooks });
+  } catch (error) {
+    console.error("Search error:", error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+  
 

@@ -6,7 +6,9 @@ module.exports = {
       fontFamily: {
         Montserrat: ["Montserrat", "sans-serif"],
         BebasNeue: ["Bebas Neue", "sans-serif"],
-        NightPumpkind: ["Night Pumpkind", "sans-serif"]
+        NightPumpkind: ["Night Pumpkind", "sans-serif"],
+        Merriweather: ["Merriweather", "serif"],
+        OpenSans: ["Open Sans", "sans-serif"],
       },
       keyframes: {
         slideUp: {

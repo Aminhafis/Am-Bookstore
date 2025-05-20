@@ -51,7 +51,7 @@ const BookById = () => {
         />
         <h2 className="text-5xl text-center font-semibold">{book.title}</h2>
         <p className="text-gray-600 mt-2">{book.author}</p>
-        <p className="text-green-800 mt-2 font-bold">{book.price}$</p>
+        <p className="text-green-800 mt-2 font-bold">Rs {book.price}</p>
         <p className='text-gray-700 text-xl p-4'>{book.description}</p>
           <button
                 onClick={() => addToCart(book)}

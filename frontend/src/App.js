@@ -16,6 +16,7 @@ import Contact from './components/Contact';
 import EditProduct from './admin/EditProduct';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SearchResults from './components/SearchResults';
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route path='/category' element={<BookByCategory/>}></Route>
         <Route path='/book/:id' element={<BookById/>}></Route>
         <Route path="/admin/edit-product/:id" element={<EditProduct />} />
+        <Route path="/search" element={<SearchResults />} />
 
         </Route>
       </Routes> 
