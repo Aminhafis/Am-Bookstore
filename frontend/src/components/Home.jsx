@@ -27,7 +27,6 @@ import wherethecrawdadssinging from "../imgs/wherethecrawdadssing.jpg";
 
 import slide1 from "../imgs/slide1.jpg";
 import slide2 from "../imgs/slide2.jpg";
-import slide3 from "../imgs/slide3.jpg";
 import slide4 from "../imgs/slide4.avif";
 import slide5 from "../imgs/slide5.jpg";
 import slide6 from "../imgs/slide6.jpg";
@@ -92,7 +91,6 @@ const Carousel = () => {
   const secondarySlides = [
     { src: slide1 },
     { src: slide2 },
-    { src: slide3 },
     { src: slide4 },
     { src: slide5 },
     { src: slide6 },

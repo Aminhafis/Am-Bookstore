@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const BookById = () => {
   const [book, setBook] = useState(null);
@@ -18,7 +19,7 @@ const BookById = () => {
         price: book.price,
         quantity:1,
       })
-      alert(`${book.title} added to cart`)
+      toast.success(`${book.title} added to cart!`);
     } catch (error) {
       console.error("Error adding item to cart:", error);
     }
@@ -32,6 +33,7 @@ const BookById = () => {
         setBook(response.data);
       } catch (error) {
         console.error('Error fetching book data:', error);
+        toast.error('Failed to load book data.');
       }
     };
     fetchBook();
@@ -49,13 +51,13 @@ const BookById = () => {
           src={book.image}
           alt={book.title}
         />
-        <h2 className="text-5xl text-center font-semibold">{book.title}</h2>
-        <p className="text-gray-600 mt-2">{book.author}</p>
-        <p className="text-green-800 mt-2 font-bold">Rs {book.price}</p>
+        <h2 className="text-5xl text-center font-semibold hover:text-gray-600">{book.title}</h2>
+        <p className="text-gray-600 mt-2 hover:text-slate-800">{book.author}</p>
+        <p className="text-green-800 mt-2 font-bold hover:text-slate-600">Rs {book.price}</p>
         <p className='text-gray-700 text-xl p-4'>{book.description}</p>
           <button
                 onClick={() => addToCart(book)}
-                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md w-full hover:bg-blue-700"
+                className="mt-4 px-4 py-2 bg-slate-700 text-white rounded-md w-52 hover:bg-slate-900"
               >
                 Add to Cart
               </button>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -8,7 +8,7 @@ function useQuery() {
 }
 
 function SearchResults() {
-  const query = useQuery().get('query'); // make sure it's "query" not "q"
+  const query = useQuery().get('query'); // make sure it's "query"
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(true);
@@ -16,8 +16,9 @@ function SearchResults() {
   useEffect(() => {
     if (query) {
       setLoading(true);
-      axios.get(`/api/book/search?q=${query}`)
-        .then(res => {
+      axios
+        .get(`https://am-bookstore-mw9b.onrender.com/api/book/search?q=${query}`)
+        .then((res) => {
           setResults(res.data.books);
           setFound(res.data.found);
           setLoading(false);
@@ -26,7 +27,7 @@ function SearchResults() {
             toast.info('No matching books found. Showing related books.');
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
           toast.error('Something went wrong while searching.');
           setLoading(false);
@@ -35,24 +36,38 @@ function SearchResults() {
   }, [query]);
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-semibold mb-4">
-        {found ? `Search Results for "${query}"` : `No match for "${query}" — showing related books:`}
+    <div className="p-6 min-h-screen bg-gray-100">
+      <h2 className="text-2xl font-semibold mb-6 text-center">
+        {found
+          ? `Search Results for "${query}"`
+          : `No match for "${query}" — showing related books:`}
       </h2>
 
       {loading ? (
-        <p>Loading...</p>
+        <div className="text-center text-lg text-gray-600">Loading...</div>
       ) : results.length === 0 ? (
-        <p>No books available.</p>
+        <div className="text-center text-red-500">No books available.</div>
       ) : (
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {results.map(book => (
-            <li key={book._id} className="border p-4 rounded shadow">
-              <h3 className="text-lg font-bold">{book.title}</h3>
-              <p className="text-gray-600">by {book.author}</p>
-            </li>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {results.map((book) => (
+            <Link
+              to={`/book/${book._id}`}
+              key={book._id}
+              className="bg-white rounded-lg shadow hover:shadow-md transition overflow-hidden"
+            >
+              <img
+                src={book.image}
+                alt={book.title}
+                className="h-60 w-full object-cover"
+              />
+              <div className="p-4">
+                <h3 className="text-lg font-semibold">{book.title}</h3>
+                <p className="text-sm text-gray-600">by {book.author}</p>
+                <p className="text-green-700 font-bold mt-2">Rs {book.price}</p>
+              </div>
+            </Link>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

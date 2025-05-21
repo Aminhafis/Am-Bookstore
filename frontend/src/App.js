@@ -40,6 +40,7 @@ function App() {
         <Route path='/book/:id' element={<BookById/>}></Route>
         <Route path="/admin/edit-product/:id" element={<EditProduct />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/book/:id" element={<BookById />} />
 
         </Route>
       </Routes> 

@@ -72,8 +72,7 @@ function Navbar() {
             onClick={() => navigate('/cart')}
             className='flex items-center gap-2 cursor-pointer'
           >
-            <RiShoppingBagLine className="h-5 w-5" />
-            <span>Cart</span>
+            <RiShoppingBagLine className="h-5 w-5 hover:text-black cursor-pointer" />
           </div>
         </div>
       </div>
