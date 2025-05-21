@@ -32,6 +32,17 @@ function Navbar() {
     setDropdownOpen(false);
   };
 
+  const handleCartClick = () => {
+    const userId = localStorage.getItem("Id");
+
+    if (!userId) {
+      toast.error("Please login to view your cart.");
+      return;
+    }
+
+    navigate("/cart");
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -62,18 +73,18 @@ function Navbar() {
       <div className='hidden md:flex justify-between items-center px-6 py-2 text-sm text-gray-500'>
         <div className='flex gap-4'>
           <span>Follow us:</span>
-          <FaInstagram className="hover:text-black cursor-pointer" />
-          <FaFacebookF className="hover:text-black cursor-pointer" />
-          <FaXTwitter className="hover:text-black cursor-pointer" />
+          <FaInstagram className="h-4 w-4 hover:text-black cursor-pointer" />
+          <FaFacebookF className="h-4 w-4 hover:text-black cursor-pointer" />
+          <FaXTwitter className="h-4 w-4 hover:text-black cursor-pointer" />
         </div>
         <div className='flex gap-6 items-center'>
-          <SearchBox />
-          <div
-            onClick={() => navigate('/cart')}
-            className='flex items-center gap-2 cursor-pointer'
-          >
-            <RiShoppingBagLine className="h-5 w-5 hover:text-black cursor-pointer" />
-          </div>
+          <SearchBox className="h-5 w-5" />
+         <div
+      onClick={handleCartClick}
+      className="flex items-center gap-2 cursor-pointer"
+    >
+      <RiShoppingBagLine className="h-5 w-5 hover:text-black cursor-pointer" />
+    </div>
         </div>
       </div>
 
@@ -140,7 +151,7 @@ function Navbar() {
 
         {/* Mobile Menu Icon */}
         <button className='md:hidden text-2xl' onClick={() => setMenuOpen(!menuOpen)}>
-          <VscThreeBars />
+          <VscThreeBars className='h-5 w-5 cursor-pointer' />
         </button>
       </div>
 

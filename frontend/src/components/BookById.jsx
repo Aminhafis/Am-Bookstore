@@ -9,8 +9,14 @@ const BookById = () => {
 
 
   //Add items to  cart 
-  const addToCart = async (book)=>{
+  const addToCart = async (book) => {
     let userId = localStorage.getItem('Id')
+
+    if (!userId) {
+      toast.error("Please login to add books to the cart.");
+      return;
+    }
+
     try {
       await axios.post('https://am-bookstore-mw9b.onrender.com/api/cart', {
         userId,

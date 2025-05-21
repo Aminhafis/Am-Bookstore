@@ -43,6 +43,10 @@ app.get("/", (req, res) => {
   res.send("Amin's Bookstore backend is running 🚀");
 });
 
+app.get('/monitor', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // Port
 const port = process.env.PORT || 12000;
 app.listen(port, () => {
